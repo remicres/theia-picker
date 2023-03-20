@@ -7,7 +7,7 @@
 ## Installation
 
 ```commandline
-pip install https://gitlab.irstea.fr/umr-tetis/theia-picker/-/archive/main/theia-picker-main.zip
+pip install theia-picker
 ```
 
 ## Quickstart

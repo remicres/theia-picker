@@ -11,6 +11,7 @@ stages:
   - Install
   - Documentation
   - Test
+  - Ship
 
 # --------------------------------------------- Static analysis --------------------------------------------------------
 
@@ -76,3 +77,15 @@ tests:
     - pip install .
     - python tests/download_test.py
 
+# -------------------------------------- Ship ---------------------------------------
+
+pypi:
+  stage: Ship
+  only:
+   - master
+  before_script:
+   - python3 -m pip install --upgrade build twine
+  script:
+   - python3 -m build
+  after_script:
+   - python3 -m twine upload --repository-url https://upload.pypi.org/legacy/ --non-interactive -u __token__ -p $pypi_token dist/*
