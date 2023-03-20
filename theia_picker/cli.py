@@ -40,6 +40,7 @@ theia-picker-cli ... --info
 # Download
 
 For each product found from the search, the following can be downloaded:
+
 - The entire archive: just set **download_dir** to the directory where you
   want to download the products archives. If the destination file already
   exist in the download directory, the md5 checksum is computed to check if
