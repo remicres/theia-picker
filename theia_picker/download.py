@@ -665,6 +665,8 @@ class Feature(BaseModel, extra=Extra.allow):
             renew_token: force the token renewal prior to download
 
         """
+        log.debug("Downloading archive in %s", download_dir)
+
         # create output directory
         Path(download_dir).mkdir(parents=True, exist_ok=True)
 
@@ -739,6 +741,8 @@ class Feature(BaseModel, extra=Extra.allow):
             renew_token: can be used to force the token renewal
 
         """
+        log.debug("Downloading file %s in %s", filename, download_dir)
+
         # create output directory
         output_dir = os.path.join(
             download_dir,
@@ -759,6 +763,32 @@ class Feature(BaseModel, extra=Extra.allow):
             overwrite=overwrite,
             renew_token=renew_token
         )
+
+    def download_files(
+            self,
+            download_dir: str,
+            matching: List[str],
+            overwrite: bool = False,
+            renew_token: bool = False
+    ):
+        """
+        Download multiple files from the remote archive.
+
+        Args:
+            download_dir: download directory
+            matching: list of string to match filenames
+            overwrite: overwrite
+            renew_token: force the token renewal prior to download each file
+
+        """
+        for filename in self.list_files_in_archive():
+            if any(match in filename for match in matching):
+                self.download_single_file(
+                    filename=filename,
+                    download_dir=download_dir,
+                    overwrite=overwrite,
+                    renew_token=renew_token
+                )
 
 
 class TheiaCatalog:  # pylint: disable = too-few-public-methods
