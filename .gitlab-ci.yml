@@ -1,0 +1,78 @@
+default:
+  image: python:3.8-slim
+
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_BRANCH == 'main'
+
+stages:
+  - Static Analysis
+  - Install
+  - Documentation
+  - Test
+
+# --------------------------------------------- Static analysis --------------------------------------------------------
+
+.static_analysis_base:
+  stage: Static Analysis
+  allow_failure: true
+
+flake8:
+  extends: .static_analysis_base
+  script:
+    - pip install flake8
+    - flake8 $PWD/theia_picker
+
+pylint:
+  extends: .static_analysis_base
+  script:
+    - pip install pylint requests pydantic urllib3 tqdm
+    - pylint $PWD/theia_picker
+
+codespell:
+  extends: .static_analysis_base
+  script: 
+    - pip install codespell
+    - codespell $PWD/theia_picker
+
+# ----------------------------------------------------- Install --------------------------------------------------------
+
+pip_install:
+  stage: Install
+  script:
+    - pip install .
+
+# ------------------------------------------------------- Doc ----------------------------------------------------------
+
+.doc_base:
+  stage: Documentation
+  before_script:
+    - pip install mkdocstrings mkdocstrings[crystal,python] mkdocs-material mkdocs-gen-files mkdocs-section-index mkdocs-literate-nav mkdocs-mermaid2-plugin --upgrade
+  artifacts:
+    paths:
+      - public
+      - public_test
+
+pages_tests:
+  extends: .doc_base
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  script:
+    - mkdocs build --site-dir public_test
+
+pages:
+  extends: .doc_base
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  script:
+    - mkdocs build --site-dir public
+
+# ------------------------------------------------------ Tests ---------------------------------------------------------
+
+tests:
+  stage: Test
+  script:
+    - pip install .
+    - python tests/download_test.py
+

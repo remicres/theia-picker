@@ -1,0 +1,56 @@
+# mkdocs.yml
+theme:
+  logo: https://labo.obs-mip.fr/wp-content-labo/uploads/sites/19/2013/01/Theia_en.png
+  name: "material"
+  icon:
+    repo: fontawesome/brands/gitlab
+  features:
+    - content.code.annotate
+    - navigation.tabs
+    - toc.follow
+    
+plugins:
+- search
+- gen-files:
+    scripts:
+    - doc/gen_ref_pages.py
+- mkdocstrings:
+    watch:
+    - theia_picker/
+- literate-nav:
+    nav_file: SUMMARY.md
+- section-index
+- mermaid2
+
+nav:
+- API:  reference/ 
+- Home: index.md
+
+# Customization
+extra:
+  feature:
+    tabs: true
+  social:
+    - icon: fontawesome/brands/gitlab
+      link: https://gitlab.irstea.fr/umr-tetis/theia_picker
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      title: On this page
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      # make exceptions to highlighting of code:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid
+
+# rest of the navigation..
+site_name: THEIA-Picker
+repo_url: https://gitlab.irstea.fr/umr-tetis/theia_picker
+repo_name: theia-picker
+docs_dir: doc/
