@@ -33,7 +33,7 @@ be retrieved individually, without downloading the whole archive contents:
 ```python
 from theia_picker import TheiaCatalog
 
-# Download band 6 from a Sentinel-2 Level 2A product
+# Download bands 4 and 8 from a Sentinel-2 Level 2A product
 cat = TheiaCatalog("credentials.json")
 feats = cat.search(tile_name="T31TEJ", start_date="14/01/2021", level="LEVEL2A")
 for f in feats:

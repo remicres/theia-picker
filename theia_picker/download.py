@@ -2,73 +2,6 @@
 """
 This module handles the download of Theia products.
 
-The `TheiaCatalog` uses Theia credentials, stored in a JSON file:
-
-```json
-{
-    "ident": "remi.cresson@inrae.fr",
-    "pass": "thisisnotmyrealpassword"
-}
-```
-
-To instantiate the `TheiaCatalog`:
-``` py
-theia = TheiaCatalog("/path/to.credentials.json")
-```
-
-# Search
-
-The following example shows how to use the `TheiaCatalog` to search
-all Sentinel-2 images in a bounding box within a temporal range.
-
-``` py
-features = theia.search(
-    bbox=[4.317, 43.706, 4.420, 43.708],
-    start_date="01/01/2020",
-    end_date="O1/O1/2022",
-    level="LEVEL2A"
-)
-```
-
-Here `features` is a `list` of `Feature` instances.
-
-# Entire archive download
-
-Each feature can be downloaded entirely (meaning, the whole archive):
-
-``` py
-for feature in features:
-    feature.download_archive("/path/to/download_dir/")
-```
-When files already exist, the md5sum is computed and compared with the one
-in the catalog, in order to determine if it has to be downloaded again.
-If the file is already downloaded and is complete according to the md5sum,
-its download is skipped.
-To force the download, call `download_archive(..., overwrite=True)`.
-
-# Partial archive download
-
-## List files in the archive
-
-The remote archive **is not downloaded** to perform this action.
-
-``` py
-for f in features:
-    f.list_files_in_archive()
-```
-
-## Download and unzip a specific file
-
-Only **a subset** of the remote archive will be downloaded.
-
-``` py
-for f in features:
-    f.download_single_file(
-        "SENTINEL2A_..._V3-0/SENTINEL2A_..._QKL_ALL.jpg",
-        output_dir="/path/to/downloads/"
-    )
-```
-
 """
 import datetime
 import hashlib
@@ -484,24 +417,21 @@ class RemoteZip:
             self,
             filename: str,
             output_dir: str,
-            overwrite: bool = False,
             renew_token: bool = False
     ):
         """
         Download a single file from the remote archive.
 
-        If the destination file already exists in the download directory, and
-        overwrite is set to False, the CRC32 checksum is computed and compared
-        with the CRC32 of the compressed file in the remote archive. If they
-        match, the download is skipped.
-        After the download, the CRC32 checksum is computed and compared with
-        the CRC32 of the compressed file in the remote archive. If they don't
-        match, the download is retried.
+        If the destination file already exists in the download directory, the
+        CRC32 checksum is computed and compared with the CRC32 of the
+        compressed file in the remote archive. If they match, the download is
+        skipped. After the download, the CRC32 checksum is computed and
+        compared with the CRC32 of the compressed file in the remote archive.
+        If they don't match, the download is retried.
 
         Args:
             filename: file path in the remote archive
             output_dir: output directory
-            overwrite: overwrite existing downloaded file
             renew_token: can be used to force the token renewal
 
         """
@@ -529,15 +459,12 @@ class RemoteZip:
         output_file = os.path.join(output_dir, os.path.basename(filename))
 
         # Check if file already exist
-        if not overwrite:
-            if os.path.isfile(output_file):
-                crc_out = compute_crc32(output_file)
-                log.debug("CRC32 (existing file): %s", crc_out)
-                if crc_out == crc:
-                    log.info(
-                        "File %s already downloaded. Skipping.", output_file
-                    )
-                    return
+        if os.path.isfile(output_file):
+            crc_out = compute_crc32(output_file)
+            log.debug("CRC32 (existing file): %s", crc_out)
+            if crc_out == crc:
+                log.info("File %s already downloaded. Skipping.", output_file)
+                return
 
         start = info["header_offset"] + sizeof_localhdr + fnlen + extralen
         self._get_range(start=start, length=size, output_file=output_file)
@@ -653,12 +580,12 @@ class Feature(BaseModel, extra=Extra.allow):
         """
         Download the entire archive.
 
-        If the destination file already exists in the download directory, and
-        overwrite is set to False, the MD5 checksum is computed and compared
-        with the MD5 of the remote archive. If they match, the download is
-        skipped. After the download, the MD5 checksum is computed and compared
-        with the MD5 of the compressed file in the remote archive. If they
-        don't match, the download is retried.
+        If the destination file already exists in the download directory, the
+        MD5 checksum is computed and compared with the MD5 of the remote
+        archive. If they match, the download is skipped. After the download,
+        the MD5 checksum is computed and compared with the MD5 of the
+        compressed file in the remote archive. If they don't match, the
+        download is retried.
 
         Args:
             download_dir: download directory
@@ -727,7 +654,6 @@ class Feature(BaseModel, extra=Extra.allow):
             self,
             filename: str,
             download_dir: str,
-            overwrite: bool = False,
             renew_token: bool = False
     ):
         """
@@ -737,7 +663,6 @@ class Feature(BaseModel, extra=Extra.allow):
             filename: file path of the file to download/extract from the
                 remote archive
             download_dir: download directory
-            overwrite: overwrite
             renew_token: can be used to force the token renewal
 
         """
@@ -760,7 +685,6 @@ class Feature(BaseModel, extra=Extra.allow):
         remote_zip.download_single_file(
             filename=filename,
             output_dir=output_dir,
-            overwrite=overwrite,
             renew_token=renew_token
         )
 
@@ -768,7 +692,6 @@ class Feature(BaseModel, extra=Extra.allow):
             self,
             download_dir: str,
             matching: List[str],
-            overwrite: bool = False,
             renew_token: bool = False
     ):
         """
@@ -777,7 +700,6 @@ class Feature(BaseModel, extra=Extra.allow):
         Args:
             download_dir: download directory
             matching: list of string to match filenames
-            overwrite: overwrite
             renew_token: force the token renewal prior to download each file
 
         """
@@ -786,7 +708,6 @@ class Feature(BaseModel, extra=Extra.allow):
                 self.download_single_file(
                     filename=filename,
                     download_dir=download_dir,
-                    overwrite=overwrite,
                     renew_token=renew_token
                 )
 

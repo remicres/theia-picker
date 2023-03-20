@@ -1,5 +1,5 @@
 """
-Module containing helpers.
+This module contains some helpers.
 """
 import os
 import logging
