@@ -157,7 +157,7 @@ def main():
         level=params.level
     )
     n_feats = len(features)
-    log.info("Got %s results:", n_feats)
+    log.info("Got %s result(s)", n_feats)
     for i, feat in enumerate(features):
         log.info(
             "Result %s/%s: %s", i + 1, n_feats,
