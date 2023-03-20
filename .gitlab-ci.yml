@@ -57,15 +57,15 @@ pip_install:
 
 pages_tests:
   extends: .doc_base
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  except:
+   - main
   script:
     - mkdocs build --site-dir public_test
 
 pages:
   extends: .doc_base
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  only:
+   - main
   script:
     - mkdocs build --site-dir public
 
@@ -83,7 +83,7 @@ pages:
 pypi:
   stage: Ship
   only:
-   - master
+   - main
   before_script:
    - python3 -m pip install --upgrade build twine
   script:
