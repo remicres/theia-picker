@@ -38,8 +38,8 @@ with tempfile.NamedTemporaryFile("w+") as credentials_file, \
             if any(pattern in file for pattern in patterns):
                 feat.download_single_file(
                     filename=file,
-                    output_dir=output_dir
+                    download_dir=output_dir
                 )
-                out_file = os.path.join(output_dir, os.path.basename(file))
+                out_file = os.path.join(output_dir, file)
                 assert os.path.isfile(out_file)
     print("Download single file OK")
