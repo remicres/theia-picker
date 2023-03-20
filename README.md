@@ -1,7 +1,7 @@
 # Theia picker
 
 <p align="center">
-<img src="doc/forklift.png" width="240px">
+<img src="doc/forklift.png" width="320px">
 </p>
 
 

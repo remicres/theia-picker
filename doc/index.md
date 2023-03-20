@@ -1,7 +1,7 @@
 # Theia picker
 
 <p align="center">
-<img src="https://labo.obs-mip.fr/wp-content-labo/uploads/sites/19/2013/01/Theia_en.png" width="320px">
+<img src="forklift.png" width="320px">
 </p>
 
 ## Installation
