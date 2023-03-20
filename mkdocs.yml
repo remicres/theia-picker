@@ -1,6 +1,6 @@
 # mkdocs.yml
 theme:
-  logo: https://labo.obs-mip.fr/wp-content-labo/uploads/sites/19/2013/01/Theia_en.png
+  logo: https://labo.obs-mip.fr/wp-content-labo/uploads/sites/19/2015/10/theia_fond-clair1.png
   name: "material"
   icon:
     repo: fontawesome/brands/gitlab
@@ -32,7 +32,7 @@ extra:
     tabs: true
   social:
     - icon: fontawesome/brands/gitlab
-      link: https://gitlab.irstea.fr/umr-tetis/theia_picker
+      link: https://gitlab.irstea.fr/umr-tetis/theia-picker
 
 markdown_extensions:
   - toc:
@@ -51,6 +51,6 @@ markdown_extensions:
 
 # rest of the navigation..
 site_name: THEIA-Picker
-repo_url: https://gitlab.irstea.fr/umr-tetis/theia_picker
+repo_url: https://gitlab.irstea.fr/umr-tetis/theia-picker
 repo_name: theia-picker
 docs_dir: doc/
