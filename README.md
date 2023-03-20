@@ -14,34 +14,38 @@
 </a>
 </p>
 
-**Theia-picker** provides everything to **download efficiently** 
+**Theia-picker** enables to **download efficiently** 
 [theia products](https://www.theia-land.fr/en/products/).
-In particular, it is able to **download selected files from the remote 
-archive**, without the entire data (typically, a single spectral band of a 
-Sentinel-2 product).
-
-Read the **[documentation](https://umr-tetis.gitlab.irstea.page/theia-picker)** 
-to know more.
+In particular, it can **download selected files from remote 
+archives** (e.g. one specific spectral band).
 
 ## Quickstart
 
-Install the package from pip:
+Installation:
 
 ```commandline
 pip install theia-picker
 ```
 
-Perform searches and downloads. 
-Here is an example to download only spectral bands 4 and 8 of level-2a products:
+Perform searches and downloads. Entire archives can be downloaded, or files can 
+be retrieved individually, without downloading the whole archive contents:
+
 ```python
 from theia_picker import TheiaCatalog
 
-theia = TheiaCatalog("/path/to.credentials.json")
-features = theia.search(...)
-for ft in features:
-    for fn in ft.list_files_in_archive():  
-    ft.download_single_file(some_file, output_dir="...")
+# Download band 6 from a Sentinel-2 Level 2A product
+cat = TheiaCatalog("credentials.json")
+feats = cat.search(tile_name="T31TEJ", start_date="14/01/2021", level="LEVEL2A")
+for f in feats:
+    f.download_files(matching=["FRE_B4.tif", "FRE_B8.tif"], download_dir="/tmp")
 ```
+
+Theia-picker computes checksums for archives (MD5) and individual files (CRC32) 
+to ensure that they match the versions provided by the catalog and avoiding 
+unnecessary requests. 
+Read the **[documentation](https://umr-tetis.gitlab.irstea.page/theia-picker)** 
+to know more.
+
 
 ## Contact
 
