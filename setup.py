@@ -4,7 +4,7 @@ install_requires = ["requests", "pydantic", "urllib3", "tqdm"]
 
 setup(
     name="theia-picker",
-    version="0.0.3",
+    version="1.0.0",
     description="Theia picker",
     python_requires=">=3.8",
     author="Remi Cresson",
