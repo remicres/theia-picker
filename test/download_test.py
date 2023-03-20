@@ -43,3 +43,13 @@ with tempfile.NamedTemporaryFile("w+") as credentials_file, \
                 out_file = os.path.join(output_dir, file)
                 assert os.path.isfile(out_file)
     print("Download single file OK")
+
+    # Download files batch
+    feats = cat.search(
+        tile_name="T31TEJ", start_date="14/01/2021", level="LEVEL2A"
+    )
+    for f in feats:
+        f.download_files(
+            matching=["FRE_B4.tif", "FRE_B8.tif"], download_dir="/tmp"
+        )
+    print("Download multiple files OK")
