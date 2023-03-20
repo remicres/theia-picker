@@ -815,8 +815,6 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
             )
 
         features = search.json().get("features")
-        if not features:
-            raise ValueError("Something is wrong with the search result!")
         log.debug("Got %s results", len(features))
         return [
             Feature(_requests_mgr=self._requests_mgr, **record)
