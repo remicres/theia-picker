@@ -75,7 +75,7 @@ def retry(
             for retry_nb in range(times):
                 try:
                     extra_opts = {} if retry_nb == 0 else {"renew_token": True}
-                    return function(*args, **kwargs, **extra_opts)
+                    return function(*args, **{**kwargs, **extra_opts})
                 except err_cls as err:
                     log.warning("Failed to %s: %s", action, err)
                     if retry_nb == times - 1:
