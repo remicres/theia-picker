@@ -28,6 +28,10 @@ SECONDS_BTW_RETRIES = 2
 
 
 class ProgressStub:
+    """
+    TQDM stub
+    
+    """
     def __init__(self, *args, **kwargs):
         """
 
