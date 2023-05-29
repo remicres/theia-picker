@@ -380,7 +380,7 @@ class RemoteZip:
         n_bytes = 0
         with open(output_file, 'wb') if output_file else nullcontext() as file:
             if file:
-                progress_bar = progressbar(
+                pbar = progressbar(
                     total=length,
                     unit='iB',
                     unit_scale=True
@@ -393,7 +393,7 @@ class RemoteZip:
                 if file:
                     decomp_data = decomp.decompress(data)
                     file.write(decomp_data)
-                    progress_bar.update(len(data))
+                    pbar.update(len(data))
                 else:
                     content.extend(data)
                 if n_extra_bytes > 0:
@@ -402,7 +402,7 @@ class RemoteZip:
                     break
             if file:
                 file.write(decomp.flush())
-                progress_bar.close()
+                pbar.close()
 
         log.debug("Returning %s bytes", len(content))
         return content
