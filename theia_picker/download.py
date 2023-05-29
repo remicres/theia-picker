@@ -17,10 +17,9 @@ from typing import Any, Dict, List, Union, Callable
 from urllib.parse import urlencode
 from pydantic import BaseModel, Field, validator, Extra  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
 from requests.adapters import HTTPAdapter, Retry
-from tqdm.autonotebook import tqdm
 import requests
 
-from .utils import log
+from .utils import log, progressbar
 
 REQUESTS_TIMEOUT = 10
 MAX_NB_RETRIES = 5
@@ -381,7 +380,11 @@ class RemoteZip:
         n_bytes = 0
         with open(output_file, 'wb') if output_file else nullcontext() as file:
             if file:
-                progress_bar = tqdm(total=length, unit='iB', unit_scale=True)
+                progress_bar = progressbar(
+                    total=length,
+                    unit='iB',
+                    unit_scale=True
+                )
             for data in resp.iter_content(block_size):
                 n_bytes += len(data)
                 n_extra_bytes = n_bytes - length
@@ -561,7 +564,11 @@ class Feature(BaseModel, extra=Extra.allow):
         try:
             tot_size_in_bytes = int(resp.headers.get('content-length', 0))
             block_size = 32 * 1024  # 32 Kb
-            pbar = tqdm(total=tot_size_in_bytes, unit='iB', unit_scale=True)
+            pbar = progressbar(
+                total=tot_size_in_bytes,
+                unit='iB',
+                unit_scale=True
+            )
             with open(out_file, 'wb') as file:
                 for data in resp.iter_content(block_size):
                     pbar.update(len(data))
