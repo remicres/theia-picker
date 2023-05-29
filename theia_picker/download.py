@@ -27,7 +27,7 @@ MAX_NB_RETRIES = 5
 SECONDS_BTW_RETRIES = 2
 
 
-class progress_stub:
+class ProgressStub:
     def __init__(self, *args, **kwargs):
         """
 
@@ -409,7 +409,7 @@ class RemoteZip:
                     total=length,
                     unit='iB',
                     unit_scale=True
-                ) if hide_progress else progress_stub()
+                ) if hide_progress else ProgressStub()
             for data in resp.iter_content(block_size):
                 n_bytes += len(data)
                 n_extra_bytes = n_bytes - length
@@ -593,7 +593,7 @@ class Feature(BaseModel, extra=Extra.allow):
                 total=tot_size_in_bytes,
                 unit='iB',
                 unit_scale=True
-            ) if hide_progress else progress_stub()
+            ) if hide_progress else ProgressStub()
             with open(out_file, 'wb') as file:
                 for data in resp.iter_content(block_size):
                     pbar.update(len(data))
