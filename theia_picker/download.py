@@ -413,7 +413,7 @@ class RemoteZip:
                     total=length,
                     unit='iB',
                     unit_scale=True
-                ) if hide_progress else ProgressStub()
+                ) if not hide_progress else ProgressStub()
             for data in resp.iter_content(block_size):
                 n_bytes += len(data)
                 n_extra_bytes = n_bytes - length
