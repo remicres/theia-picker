@@ -597,7 +597,7 @@ class Feature(BaseModel, extra=Extra.allow):
                 total=tot_size_in_bytes,
                 unit='iB',
                 unit_scale=True
-            ) if hide_progress else ProgressStub()
+            ) if not hide_progress else ProgressStub()
             with open(out_file, 'wb') as file:
                 for data in resp.iter_content(block_size):
                     pbar.update(len(data))
