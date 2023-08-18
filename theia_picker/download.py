@@ -717,10 +717,16 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
 
     atdistrib_url = "https://theia.cnes.fr/atdistrib"
 
-    def __init__(self, config_file_json: str, max_records: int = 500):
+    def __init__(
+            self,
+            config_file_json: str = None,
+            max_records: int = 500,
+            credentials: Dict[str, str] = None
+    ):
         """
         Args:
-            config_file_json: JSON configuration file. Should look like this:
+            config_file_json: file containing the configuration, as JSON file.
+                Should look like this:
 
                 ```json
                 {
@@ -730,13 +736,16 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
                 ```
 
             max_records: Maximum number of records
+            credentials: configuration, provided as dict
 
         """
-        # Read THEIA credentials
-        with open(config_file_json, encoding='UTF-8') as json_file:
-            credentials = json.load(json_file)
-            self._requests_mgr = RequestsManager(credentials=credentials)
-
+        assert config_file_json or credentials, \
+            "config_file_json or credentials must be provided"
+        if config_file_json:
+            # Read THEIA credentials
+            with open(config_file_json, encoding='UTF-8') as json_file:
+                credentials = json.load(json_file)
+        self._requests_mgr = RequestsManager(credentials=credentials)
         self.max_records = max_records
 
     def _query(self, dict_query: dict) -> List[Feature]:

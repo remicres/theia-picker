@@ -7,15 +7,11 @@ import theia_picker
 username = os.environ["THEIA_IDENT"]
 password = os.environ["THEIA_PASS"]
 
-with tempfile.NamedTemporaryFile("w+") as credentials_file, \
-        tempfile.TemporaryDirectory() as output_dir:
-    # Save credentials to JSON file
-    data = {"ident": username, "pass": password}
-    json.dump(data, credentials_file)
-    credentials_file.flush()
-
+with tempfile.TemporaryDirectory() as output_dir:
     # Login
-    cat = theia_picker.TheiaCatalog(credentials_file.name)
+    cat = theia_picker.TheiaCatalog(
+        credentials={"ident": username, "pass": password}
+    )
     print("Login OK")
 
     # Search

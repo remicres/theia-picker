@@ -71,12 +71,12 @@ pages:
 
 # -------------------------------- Tests ---------------------------------------
 
-#tests:
-#  stage: Test
-#  allow_failure: false
-#  script:
-#    - pip install .
-#    - python tests/download_test.py
+tests:
+  stage: Test
+  allow_failure: false
+  script:
+    - pip install .
+    - python test/download_test.py
 
 # --------------------------------- Ship ---------------------------------------
 
