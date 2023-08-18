@@ -22,6 +22,8 @@ The credentials must be stored in a JSON file. It should look like this:
 }
 ```
 
+Or, you can also write the credentials in your python code inside a `dict`.
+
 ## Searching products
 
 The `TheiaCatalog` class is the top level API to access the products. It uses 
