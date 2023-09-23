@@ -40,7 +40,7 @@ class ProgressStub:
             **kwargs:
         """
 
-    def update(self):
+    def update(self, *args):
         """
 
         Returns:
