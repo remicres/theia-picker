@@ -525,7 +525,7 @@ class Properties(BaseModel):  # pylint: disable = too-few-public-methods
     services: Services = Field(alias="services")
 
 
-class Feature(BaseModel, extra=Extra.allow):
+class Feature(BaseModel):
     """
     Feature model
     Extended with custom functions to be helpful
