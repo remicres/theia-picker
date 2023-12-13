@@ -15,7 +15,7 @@ import zlib
 from contextlib import nullcontext
 from typing import Any, Dict, List, Union, Callable
 from urllib.parse import urlencode
-from pydantic import BaseModel, Field, field_validator, Extra, FieldValidationInfo  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
+from pydantic import BaseModel, Field, field_validator, Extra, FieldValidationInfo, ConfigDict  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
 from requests.adapters import HTTPAdapter, Retry
 from tqdm.autonotebook import tqdm
 import requests
@@ -530,7 +530,7 @@ class Feature(BaseModel):
     Feature model
     Extended with custom functions to be helpful
     """
-
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     _requests_mgr: RequestsManager
     _remote_zip: RemoteZip = None
     id: str = Field(alias="id")
