@@ -486,7 +486,7 @@ class Download(BaseModel):  # pylint: disable = too-few-public-methods
     url: str = Field(alias="url")
     checksum: str = Field(alias="checksum")
 
-    @field_validator("url", each_item=True)
+    @field_validator("url")
     def make_url(cls, url: str, info: FieldValidationInfo) -> str:  # pylint: disable=no-self-argument
         """
         Model validator
