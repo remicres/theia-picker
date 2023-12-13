@@ -17,14 +17,42 @@ from typing import Any, Dict, List, Union, Callable
 from urllib.parse import urlencode
 from pydantic import BaseModel, Field, validator, Extra  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
 from requests.adapters import HTTPAdapter, Retry
-from tqdm.autonotebook import tqdm
 import requests
+from tqdm.autonotebook import tqdm
 
-from .utils import log
+from .utils import log, hide_progress
 
 REQUESTS_TIMEOUT = 10
 MAX_NB_RETRIES = 5
 SECONDS_BTW_RETRIES = 2
+
+
+class ProgressStub:
+    """
+    TQDM stub
+    
+    """
+    def __init__(self, *args, **kwargs):
+        """
+
+        Args:
+            *args:
+            **kwargs:
+        """
+
+    def update(self, *args):
+        """
+
+        Returns:
+
+        """
+
+    def close(self):
+        """
+
+        Returns:
+
+        """
 
 
 def retry(
@@ -381,7 +409,11 @@ class RemoteZip:
         n_bytes = 0
         with open(output_file, 'wb') if output_file else nullcontext() as file:
             if file:
-                progress_bar = tqdm(total=length, unit='iB', unit_scale=True)
+                pbar = tqdm(
+                    total=length,
+                    unit='iB',
+                    unit_scale=True
+                ) if not hide_progress else ProgressStub()
             for data in resp.iter_content(block_size):
                 n_bytes += len(data)
                 n_extra_bytes = n_bytes - length
@@ -390,7 +422,7 @@ class RemoteZip:
                 if file:
                     decomp_data = decomp.decompress(data)
                     file.write(decomp_data)
-                    progress_bar.update(len(data))
+                    pbar.update(len(data))
                 else:
                     content.extend(data)
                 if n_extra_bytes > 0:
@@ -399,7 +431,7 @@ class RemoteZip:
                     break
             if file:
                 file.write(decomp.flush())
-                progress_bar.close()
+                pbar.close()
 
         log.debug("Returning %s bytes", len(content))
         return content
@@ -561,7 +593,11 @@ class Feature(BaseModel, extra=Extra.allow):
         try:
             tot_size_in_bytes = int(resp.headers.get('content-length', 0))
             block_size = 32 * 1024  # 32 Kb
-            pbar = tqdm(total=tot_size_in_bytes, unit='iB', unit_scale=True)
+            pbar = tqdm(
+                total=tot_size_in_bytes,
+                unit='iB',
+                unit_scale=True
+            ) if not hide_progress else ProgressStub()
             with open(out_file, 'wb') as file:
                 for data in resp.iter_content(block_size):
                     pbar.update(len(data))
