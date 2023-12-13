@@ -15,7 +15,7 @@ import zlib
 from contextlib import nullcontext
 from typing import Any, Dict, List, Union, Callable
 from urllib.parse import urlencode
-from pydantic import BaseModel, Field, field_validator, Extra  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
+from pydantic import BaseModel, Field, field_validator, Extra, FieldValidationInfo  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
 from requests.adapters import HTTPAdapter, Retry
 from tqdm.autonotebook import tqdm
 import requests
