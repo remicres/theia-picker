@@ -644,6 +644,7 @@ class Feature(BaseModel):
             List of files in the remote archive
 
         """
+        print(self._requests_mgr)
         return self._get_remote_zip().files_list
 
     @retry(
