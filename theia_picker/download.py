@@ -531,7 +531,7 @@ class Feature(BaseModel):
     Extended with custom functions to be helpful
     """
     model_config = ConfigDict(arbitrary_types_allowed=True)
-    _requests_mgr: RequestsManager = RequestsManager()
+    _requests_mgr: RequestsManager
     _remote_zip: RemoteZip = None
     id: str = Field(alias="id")
     properties: Properties = Field(alias="properties")
