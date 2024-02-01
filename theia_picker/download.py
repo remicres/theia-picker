@@ -15,7 +15,7 @@ import zlib
 from contextlib import nullcontext
 from typing import Any, Dict, List, Union, Callable
 from urllib.parse import urlencode
-from pydantic import BaseModel, Field, validator, Extra, ConfigDict  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
+from pydantic import BaseModel, Field, validator, Extra  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
 from requests.adapters import HTTPAdapter, Retry
 import requests
 from tqdm.autonotebook import tqdm
@@ -557,13 +557,11 @@ class Properties(BaseModel):  # pylint: disable = too-few-public-methods
     services: Services = Field(alias="services")
 
 
-class Feature(BaseModel):
+class Feature(BaseModel, extra=Extra.allow):
     """
     Feature model
     Extended with custom functions to be helpful
     """
-
-    model_config = ConfigDict(extra="forbid")
 
     _requests_mgr: RequestsManager
     _remote_zip: RemoteZip = None
