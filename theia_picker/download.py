@@ -522,7 +522,7 @@ class Download(BaseModel):  # pylint: disable = too-few-public-methods
     def make_url(  # pylint: disable=no-self-argument
         cls,
         url: str,
-        info: FieldValidationInfo
+        info: FieldValidationInfo  # pylint: disable=unused-argument
     ) -> str:
         """
         Model validator
