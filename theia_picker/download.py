@@ -30,7 +30,6 @@ SECONDS_BTW_RETRIES = 2
 class ProgressStub:
     """
     TQDM stub
-    
     """
     def __init__(self, *args, **kwargs):
         """
@@ -824,6 +823,7 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
             bbox: List[float] = None,
             level: str = None,
             tile_name: str = None,
+            relative_orbit_number: int = None,
     ) -> List[Feature]:
         """
         Search products in THEIA catalog.
@@ -837,6 +837,8 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
                 list of 4 float values, e.g. [3.01, 43.2, 4.0, 45.0]
             level: product level, e.g. "LEVEL2A"
             tile_name: tile name, starting with "T", e.g. "T31TEJ"
+            relative_orbit_number: relative orbit number
+                (Must be between 1 and 143)
 
         Returns:
             Features list
@@ -878,5 +880,12 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
                     f"Tile name must start with \"T\" (got {tile_name})"
                 )
             dict_query["location"] = tile_name
+        if relative_orbit_number is not None:
+            if relative_orbit_number < 1 or relative_orbit_number > 143:
+                raise ValueError(
+                    "Relative orbit number must be "
+                    f"between 1 and 143 (got {relative_orbit_number})"
+                )
+            dict_query["relativeOrbitNumber"] = relative_orbit_number
 
         return self._query(dict_query)
