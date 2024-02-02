@@ -15,7 +15,7 @@ import zlib
 from contextlib import nullcontext
 from typing import Any, Dict, List, Union, Callable
 from urllib.parse import urlencode
-from pydantic import BaseModel, Field, field_validator, Extra, FieldValidationInfo, ConfigDict  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
+from pydantic import BaseModel, Field, field_validator, FieldValidationInfo, ConfigDict  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
 from requests.adapters import HTTPAdapter, Retry
 import requests
 from tqdm.autonotebook import tqdm
@@ -519,11 +519,11 @@ class Download(BaseModel):  # pylint: disable = too-few-public-methods
     checksum: str = Field(alias="checksum")
 
     @field_validator("url")
-    def make_url(
-        cls, 
-        url: str, 
+    def make_url(  # pylint: disable=no-self-argument
+        cls,
+        url: str,
         info: FieldValidationInfo
-    ) -> str:  # pylint: disable=no-self-argument
+    ) -> str:
         """
         Model validator
 
