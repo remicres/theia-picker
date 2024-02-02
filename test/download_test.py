@@ -57,3 +57,4 @@ with tempfile.TemporaryDirectory() as output_dir:
                 matching=["FRE_B4.tif", "FRE_B8.tif"], download_dir="/tmp"
             )
         print("Download multiple files OK")
+
