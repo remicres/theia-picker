@@ -532,7 +532,7 @@ class Feature(BaseModel):
     """
     model_config = ConfigDict(arbitrary_types_allowed=True)
     requests_mgr: RequestsManager
-    _remote_zip: RemoteZip = None
+    remote_zip: RemoteZip = None
     id: str = Field(alias="id")
     properties: Properties = Field(alias="properties")
 
