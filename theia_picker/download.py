@@ -30,7 +30,7 @@ SECONDS_BTW_RETRIES = 2
 class ProgressStub:
     """
     TQDM stub
-    
+
     """
     def __init__(self, *args, **kwargs):
         """
@@ -519,7 +519,11 @@ class Download(BaseModel):  # pylint: disable = too-few-public-methods
     checksum: str = Field(alias="checksum")
 
     @field_validator("url")
-    def make_url(cls, url: str, info: FieldValidationInfo) -> str:  # pylint: disable=no-self-argument
+    def make_url(
+        cls, 
+        url: str, 
+        info: FieldValidationInfo
+    ) -> str:  # pylint: disable=no-self-argument
         """
         Model validator
 
