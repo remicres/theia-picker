@@ -531,7 +531,7 @@ class Feature(BaseModel):
     Extended with custom functions to be helpful
     """
     model_config = ConfigDict(arbitrary_types_allowed=True)
-    _requests_mgr: RequestsManager
+    requests_mgr: RequestsManager
     _remote_zip: RemoteZip = None
     id: str = Field(alias="id")
     properties: Properties = Field(alias="properties")
@@ -556,8 +556,8 @@ class Feature(BaseModel):
 
         """
         if renew_token:
-            self._requests_mgr.renew_authorization_headers()
-        resp = self._requests_mgr.get(self.properties.services.download.url)
+            self.requests_mgr.renew_authorization_headers()
+        resp = self.requests_mgr.get(self.properties.services.download.url)
         try:
             tot_size_in_bytes = int(resp.headers.get('content-length', 0))
             block_size = 32 * 1024  # 32 Kb
@@ -628,13 +628,13 @@ class Feature(BaseModel):
 
         """
         if renew_token:
-            self._requests_mgr.renew_authorization_headers()
-        if not self._remote_zip:
-            self._remote_zip = RemoteZip(
+            self.requests_mgr.renew_authorization_headers()
+        if not self.remote_zip:
+            self.remote_zip = RemoteZip(
                 url=self.properties.services.download.url,
-                requests_mgr=self._requests_mgr
+                requests_mgr=self.requests_mgr
             )
-        return self._remote_zip
+        return self.remote_zip
 
     def list_files_in_archive(self) -> List[str]:
         """
@@ -644,7 +644,7 @@ class Feature(BaseModel):
             List of files in the remote archive
 
         """
-        print(self._requests_mgr)
+        print(self.requests_mgr)
         return self._get_remote_zip().files_list
 
     @retry(
@@ -746,7 +746,7 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
             # Read THEIA credentials
             with open(config_file_json, encoding='UTF-8') as json_file:
                 credentials = json.load(json_file)
-        self._requests_mgr = RequestsManager(credentials=credentials)
+        self.requests_mgr = RequestsManager(credentials=credentials)
         self.max_records = max_records
 
     def _query(self, dict_query: dict) -> List[Feature]:
@@ -778,7 +778,7 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
         features = search.json().get("features")
         log.debug("Got %s results", len(features))
         return [
-            Feature(_requests_mgr=self._requests_mgr, **record)
+            Feature(requests_mgr=self.requests_mgr, **record)
             for record in features
         ]
 
