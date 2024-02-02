@@ -43,6 +43,7 @@ pip_install:
   stage: Install
   script:
     - pip install .
+    - python -c "import theia_picker"
 
 # ------------------------------- Doc ------------------------------------------
 

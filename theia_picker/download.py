@@ -15,7 +15,7 @@ import zlib
 from contextlib import nullcontext
 from typing import Any, Dict, List, Union, Callable
 from urllib.parse import urlencode
-from pydantic import BaseModel, Field, validator, Extra  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
+from pydantic import BaseModel, Field, field_validator, FieldValidationInfo, ConfigDict  # pylint: disable = no-name-in-module, line-too-long  # noqa: E501
 from requests.adapters import HTTPAdapter, Retry
 import requests
 from tqdm.autonotebook import tqdm
@@ -30,7 +30,7 @@ SECONDS_BTW_RETRIES = 2
 class ProgressStub:
     """
     TQDM stub
-    
+
     """
     def __init__(self, *args, **kwargs):
         """
@@ -518,8 +518,12 @@ class Download(BaseModel):  # pylint: disable = too-few-public-methods
     url: str = Field(alias="url")
     checksum: str = Field(alias="checksum")
 
-    @validator('url', each_item=True)
-    def make_url(cls, url: str) -> str:  # pylint: disable=no-self-argument
+    @field_validator("url")
+    def make_url(  # pylint: disable=no-self-argument
+        cls,
+        url: str,
+        info: FieldValidationInfo  # pylint: disable=unused-argument
+    ) -> str:
         """
         Model validator
 
@@ -557,14 +561,14 @@ class Properties(BaseModel):  # pylint: disable = too-few-public-methods
     services: Services = Field(alias="services")
 
 
-class Feature(BaseModel, extra=Extra.allow):
+class Feature(BaseModel):
     """
     Feature model
     Extended with custom functions to be helpful
     """
-
-    _requests_mgr: RequestsManager
-    _remote_zip: RemoteZip = None
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    requests_mgr: RequestsManager
+    remote_zip: RemoteZip = None
     id: str = Field(alias="id")
     properties: Properties = Field(alias="properties")
 
@@ -588,8 +592,8 @@ class Feature(BaseModel, extra=Extra.allow):
 
         """
         if renew_token:
-            self._requests_mgr.renew_authorization_headers()
-        resp = self._requests_mgr.get(self.properties.services.download.url)
+            self.requests_mgr.renew_authorization_headers()
+        resp = self.requests_mgr.get(self.properties.services.download.url)
         try:
             tot_size_in_bytes = int(resp.headers.get('content-length', 0))
             block_size = 32 * 1024  # 32 Kb
@@ -664,13 +668,13 @@ class Feature(BaseModel, extra=Extra.allow):
 
         """
         if renew_token:
-            self._requests_mgr.renew_authorization_headers()
-        if not self._remote_zip:
-            self._remote_zip = RemoteZip(
+            self.requests_mgr.renew_authorization_headers()
+        if not self.remote_zip:
+            self.remote_zip = RemoteZip(
                 url=self.properties.services.download.url,
-                requests_mgr=self._requests_mgr
+                requests_mgr=self.requests_mgr
             )
-        return self._remote_zip
+        return self.remote_zip
 
     def list_files_in_archive(self) -> List[str]:
         """
@@ -680,6 +684,7 @@ class Feature(BaseModel, extra=Extra.allow):
             List of files in the remote archive
 
         """
+        print(self.requests_mgr)
         return self._get_remote_zip().files_list
 
     @retry(
@@ -781,7 +786,7 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
             # Read THEIA credentials
             with open(config_file_json, encoding='UTF-8') as json_file:
                 credentials = json.load(json_file)
-        self._requests_mgr = RequestsManager(credentials=credentials)
+        self.requests_mgr = RequestsManager(credentials=credentials)
         self.max_records = max_records
 
     def _query(self, dict_query: dict) -> List[Feature]:
@@ -813,7 +818,7 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
         features = search.json().get("features")
         log.debug("Got %s results", len(features))
         return [
-            Feature(_requests_mgr=self._requests_mgr, **record)
+            Feature(requests_mgr=self.requests_mgr, **record)
             for record in features
         ]
 

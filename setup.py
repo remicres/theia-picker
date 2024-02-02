@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-install_requires = ["requests", "pydantic==1.*", "urllib3", "tqdm"]
+install_requires = ["requests", "pydantic==2.*", "urllib3", "tqdm"]
 
 setup(
     name="theia-picker",
