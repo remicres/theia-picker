@@ -557,8 +557,16 @@ class Properties(BaseModel):  # pylint: disable = too-few-public-methods
     water_cover: int = Field(alias="waterCover")
     snow_cover: int = Field(alias="snowCover")
     cloud_cover: int = Field(alias="cloudCover")
+    relative_orbit_number: int = Field(alias="relativeOrbitNumber")
     tile: str = Field(alias="location")
     services: Services = Field(alias="services")
+
+
+class Geometry(BaseModel):  # pylint: disable = too-few-public-methods
+    """
+    Geometry model
+    """
+    polygon: list = Field(alias="coordinates")
 
 
 class Feature(BaseModel):
@@ -570,6 +578,7 @@ class Feature(BaseModel):
     requests_mgr: RequestsManager
     remote_zip: RemoteZip = None
     id: str = Field(alias="id")
+    geometry: Geometry = Field(alias="geometry")
     properties: Properties = Field(alias="properties")
 
     @retry(
@@ -684,7 +693,6 @@ class Feature(BaseModel):
             List of files in the remote archive
 
         """
-        print(self.requests_mgr)
         return self._get_remote_zip().files_list
 
     @retry(
