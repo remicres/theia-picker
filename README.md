@@ -43,7 +43,7 @@ for f in feats:
 Theia-picker computes checksums for archives (MD5) and individual files (CRC32) 
 to ensure that they match the versions provided by the catalog and avoiding 
 unnecessary requests. 
-Read the **[documentation](https://umr-tetis.gitlab.irstea.page/theia-picker)** 
+Read the **[documentation](https://cdos-pub.pages.mia.inra.fr/theia-picker)** 
 to know more.
 
 
