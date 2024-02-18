@@ -3,11 +3,11 @@
 <p align="center">
 <img src="doc/forklift.png" width="320px">
 <br>
-<a href="https://gitlab.irstea.fr/umr-tetis/theia-picker/-/releases">
-<img src="https://gitlab.irstea.fr/umr-tetis/theia-picker/-/badges/release.svg">
+<a href="https://forgemia.inra.fr/cdos-pub/theia-picker/-/releases">
+<img src="https://forgemia.inra.fr/cdos-pub/theia-picker/-/badges/release.svg">
 </a>
-<a href="https://gitlab.irstea.fr/umr-tetis/theia-picker/-/commits/main">
-<img src="https://gitlab.irstea.fr/umr-tetis/theia-picker/badges/main/pipeline.svg">
+<a href="https://forgemia.inra.fr/cdos-pub/theia-picker/-/commits/main">
+<img src="https://forgemia.inra.fr/cdos-pub/theia-picker/badges/main/pipeline.svg">
 </a>
 <a href="LICENSE">
 <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
@@ -43,7 +43,7 @@ for f in feats:
 Theia-picker computes checksums for archives (MD5) and individual files (CRC32) 
 to ensure that they match the versions provided by the catalog and avoiding 
 unnecessary requests. 
-Read the **[documentation](https://umr-tetis.gitlab.irstea.page/theia-picker)** 
+Read the **[documentation](https://cdos-pub.pages.mia.inra.fr/theia-picker)** 
 to know more.
 
 
