@@ -3,11 +3,11 @@
 <p align="center">
 <img src="doc/forklift.png" width="320px">
 <br>
-<a href="https://gitlab.irstea.fr/umr-tetis/theia-picker/-/releases">
-<img src="https://gitlab.irstea.fr/umr-tetis/theia-picker/-/badges/release.svg">
+<a href="https://forgemia.inra.fr/cdos-pub/theia-picker/-/releases">
+<img src="https://forgemia.inra.fr/cdos-pub/theia-picker/-/badges/release.svg">
 </a>
-<a href="https://gitlab.irstea.fr/umr-tetis/theia-picker/-/commits/main">
-<img src="https://gitlab.irstea.fr/umr-tetis/theia-picker/badges/main/pipeline.svg">
+<a href="https://forgemia.inra.fr/cdos-pub/theia-picker/-/commits/main">
+<img src="https://forgemia.inra.fr/cdos-pub/theia-picker/badges/main/pipeline.svg">
 </a>
 <a href="LICENSE">
 <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
