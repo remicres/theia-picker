@@ -3,12 +3,12 @@ theme:
   logo: https://labo.obs-mip.fr/wp-content-labo/uploads/sites/19/2015/10/theia_fond-clair1.png
   name: "material"
   icon:
-    repo: fontawesome/brands/gitlab
+    repo: fontawesome/brands/github
   features:
     - content.code.annotate
     - navigation.tabs
     - toc.follow
-    
+
 plugins:
 - search
 - gen-files:
@@ -23,7 +23,7 @@ plugins:
 - mermaid2
 
 nav:
-- API:  reference/ 
+- API:  reference/
 - Home: index.md
 
 # Customization
