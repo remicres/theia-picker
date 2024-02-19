@@ -557,8 +557,16 @@ class Properties(BaseModel):  # pylint: disable = too-few-public-methods
     water_cover: int = Field(alias="waterCover")
     snow_cover: int = Field(alias="snowCover")
     cloud_cover: int = Field(alias="cloudCover")
+    relative_orbit_number: int = Field(alias="relativeOrbitNumber")
     tile: str = Field(alias="location")
     services: Services = Field(alias="services")
+
+
+class Geometry(BaseModel):  # pylint: disable = too-few-public-methods
+    """
+    Geometry model
+    """
+    polygon: list = Field(alias="coordinates")
 
 
 class Feature(BaseModel):
@@ -570,6 +578,7 @@ class Feature(BaseModel):
     requests_mgr: RequestsManager
     remote_zip: RemoteZip = None
     id: str = Field(alias="id")
+    geometry: Geometry = Field(alias="geometry")
     properties: Properties = Field(alias="properties")
 
     @retry(
@@ -684,7 +693,6 @@ class Feature(BaseModel):
             List of files in the remote archive
 
         """
-        print(self.requests_mgr)
         return self._get_remote_zip().files_list
 
     @retry(
@@ -829,6 +837,7 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
             bbox: List[float] = None,
             level: str = None,
             tile_name: str = None,
+            relative_orbit_number: int = None,
     ) -> List[Feature]:
         """
         Search products in THEIA catalog.
@@ -842,6 +851,8 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
                 list of 4 float values, e.g. [3.01, 43.2, 4.0, 45.0]
             level: product level, e.g. "LEVEL2A"
             tile_name: tile name, starting with "T", e.g. "T31TEJ"
+            relative_orbit_number: relative orbit number
+                (Must be between 1 and 143)
 
         Returns:
             Features list
@@ -883,5 +894,12 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
                     f"Tile name must start with \"T\" (got {tile_name})"
                 )
             dict_query["location"] = tile_name
+        if relative_orbit_number is not None:
+            if relative_orbit_number < 1 or relative_orbit_number > 143:
+                raise ValueError(
+                    "Relative orbit number must be "
+                    f"between 1 and 143 (got {relative_orbit_number})"
+                )
+            dict_query["relativeOrbitNumber"] = relative_orbit_number
 
         return self._query(dict_query)
