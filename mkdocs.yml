@@ -31,8 +31,8 @@ extra:
   feature:
     tabs: true
   social:
-    - icon: fontawesome/brands/gitlab
-      link: https://gitlab.irstea.fr/umr-tetis/theia-picker
+    - icon: fontawesome/brands/github
+      link: https://github.com/remicres/theia-picker
 
 markdown_extensions:
   - toc:
@@ -51,6 +51,6 @@ markdown_extensions:
 
 # rest of the navigation..
 site_name: THEIA-Picker
-repo_url: https://gitlab.irstea.fr/umr-tetis/theia-picker
+repo_url: https://github.com/remicres/theia-picker
 repo_name: theia-picker
 docs_dir: doc/
