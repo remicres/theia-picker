@@ -812,7 +812,7 @@ class TheiaCatalog:  # pylint: disable = too-few-public-methods
         log.debug("Query is %s", dict_query)
         url = f"{self.atdistrib_url}/resto2/api/collections/" \
               f"SENTINEL2/search.json?{urlencode(dict_query)}"
-        search = requests.get(
+        search = self.requests_mgr.sess.get(
             url,
             headers={"Accept": "application/json"},
             timeout=REQUESTS_TIMEOUT
