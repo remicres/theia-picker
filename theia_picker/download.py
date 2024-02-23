@@ -108,11 +108,12 @@ def retry(
                     log.warning("Failed to %s: %s", action, err)
                     if retry_nb == times - 1:
                         raise
+                mult_sleep_duration = sleep_duration * 2 ** retry_nb
                 log.warning(
                     "%s attempts left. Retry in %s seconds...",
-                    times - retry_nb - 1, sleep_duration
+                    times - retry_nb - 1, mult_sleep_duration
                 )
-                time.sleep(sleep_duration)
+                time.sleep(mult_sleep_duration)
             return None  # should never happen
 
         return wrapper
@@ -213,6 +214,10 @@ class RequestsManager:
         self.authorization_headers = {}
         self.renew_authorization_headers()
 
+    @retry(
+        action="renew authorization headers",
+        err_cls=(ConnectionError, InvalidToken)
+    )
     def renew_authorization_headers(self):
         """
         Renew the authentication header.
