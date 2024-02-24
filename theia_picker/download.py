@@ -59,7 +59,8 @@ def retry(
         err_cls: Any,
         action: str,
         times: int = MAX_NB_RETRIES,
-        sleep_duration: int = SECONDS_BTW_RETRIES
+        sleep_duration: int = SECONDS_BTW_RETRIES,
+        renew_token_kw: bool = True
 ) -> Callable:
     """
     Wrapper to retry multiple times something.
@@ -70,6 +71,7 @@ def retry(
         action: name of the action
         times: number of retries
         sleep_duration: sleep duration after each fail attempt
+        renew_token_kw: retry with a "renew_token" keyword sets to True
 
     Returns:
         decorator
@@ -102,7 +104,8 @@ def retry(
             """
             for retry_nb in range(times):
                 try:
-                    extra_opts = {} if retry_nb == 0 else {"renew_token": True}
+                    extra_opts = {} if retry_nb == 0 or not renew_token_kw \
+                        else {"renew_token": True}
                     return function(*args, **{**kwargs, **extra_opts})
                 except err_cls as err:
                     log.warning("Failed to %s: %s", action, err)
@@ -216,7 +219,8 @@ class RequestsManager:
 
     @retry(
         action="renew authorization headers",
-        err_cls=(ConnectionError, InvalidToken)
+        err_cls=(ConnectionError, InvalidToken),
+        renew_token_kw=False
     )
     def renew_authorization_headers(self):
         """
